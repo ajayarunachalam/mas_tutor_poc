@@ -1,0 +1,53 @@
+[project]
+name = "mas-education-poc"
+version = "0.1.0"
+description = "MAS Education Proof-of-Concept — Multi-Agent Tutoring System"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "agentstack-sdk>=0.6.1",
+    "anthropic>=0.83.0",
+    "cambridge-knowledge-graph",
+    "chromadb>=1.5.1",
+    "langgraph>=1.0.9",
+    "neo4j>=6.1.0",
+    "ollama>=0.6.1",
+    "pdfplumber>=0.11.9",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.3",
+    "slowapi>=0.1.10",
+    "sympy>=1.13.0",
+    "arize-phoenix-otel>=0.6",
+    "openinference-instrumentation-langchain>=0.1",
+    "litellm>=1.55.0",
+    "mlflow>=2.19.0",
+]
+
+[project.scripts]
+tutor     = "agents.tutor_agent:main"
+assess    = "agents.assessment_agent:main"
+plan      = "agents.planning_agent:main"
+dialogue  = "agents.dialogue_agent:main"
+monitor   = "agents.monitor_agent:main"
+orchestrate = "orchestrator.poc_orchestrator:main"
+ingest    = "rag.ingest:main"
+initdb    = "db.init_db:main"
+
+[tool.uv.sources]
+cambridge-knowledge-graph = { path = "../knowledge-graph", editable = true }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "unit: fast, no network, no LLM",
+    "integration: uses TestClient, mock LLM",
+    "slow: may take >5s",
+]
+asyncio_mode = "auto"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "httpx>=0.27.0",
+]
